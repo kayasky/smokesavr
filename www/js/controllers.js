@@ -1,27 +1,22 @@
 angular.module('starter.controllers', ['ionic'])
-.constant('FORECASTIO_KEY', '0')
-.controller('HomeCtrl', function($scope,$state,Weather,DataStore) {
+.controller('HomeCtrl', function($scope,$state,DataStore) {
    //read default settings into scope
-   console.log('inside home');
-
    $scope.store  = DataStore.store;
-   var latitude  =  DataStore.latitude;
-   var longitude = DataStore.longitude;
+   var data = {
+       latitude : DataStore.latitude,
+       longitude : DataStore.longitude,
+       price : DataStore.price,
+       distance : DataStore.distance,
+       address : DataStore.address
+   };
 
-    //call getCurrentWeather method in factory ‘Weather’
-    Weather.getCurrentWeather(latitude,longitude).then(function(resp) {
-    $scope.current = resp.data;
-    console.log('GOT CURRENT', $scope.current);
-    }, function(error) {
-      alert('Unable to get current conditions');
-      console.error(error);
-   });
+   $scope.current = data;
 })
 .controller('LocationsCtrl', function($scope,$rootScope, $state,DataStore) {
      $scope.stores = [];
-     //var data = window.localStorage.getItem('stores');
+     //var data = window.localStorage.getItem('stores'); //commenting this out for now.
      var data = null;
-     Parse.initialize("APP_ID","API_KEY");
+     Parse.initialize("Mvrt7PkZ9nuhs2wyhsH9HXjUc6A0FOFDBstPH8u6","Sw0Hw9RaoOiln6YDx5s7YgVkKAn8JP6KEw3Uo6Bg");
 
     if (data != null )  {
         $scope.stores   = null;
@@ -29,14 +24,7 @@ angular.module('starter.controllers', ['ionic'])
         console.log('using local storage');
    }
    else {
-       /*
-       var storeObj = Parse.Object.extend("stores");
-       var query = new Parse.Query(storeObj);
-
-      query.descending("createdAt");  //specify sorting
-      query.limit(20);  //specify limit -- fetch only 20 objects
-*/
-        // User's location
+        // User's **dummy** location
         var userGeoPoint = new Parse.GeoPoint({latitude: 47.6097, longitude: -122.3331});
         var storeObj = Parse.Object.extend("stores");
         // Create a query for places
@@ -44,20 +32,17 @@ angular.module('starter.controllers', ['ionic'])
         // Interested in locations near user.
         query.near("coords", userGeoPoint);
         // Limit what could be a lot of points.
-        query.limit(20);
+        query.limit(50);
         // Final list of objects
         query.find({
            success:function(results) { 
                $scope.$apply(function() {
                   var index =0;
                   var Arrlen=results.length ;
-                  //console.log(Arrlen);
                    for (index = 0; index < Arrlen; ++index) {
                        var obj = results[index];
-                        //console.log(obj);
                         var pGeoPoint = new Parse.GeoPoint({ latitude: obj.attributes.coords.latitude, longitude: obj.attributes.coords.longitude });
                         var distanceFromUser = pGeoPoint.milesTo(userGeoPoint);
-                        //var placeDistance = pGeoPoint.milesTo(Parse.User.current().get("coords"));
                         $scope.stores.push({ 
                           id :  obj.id,
                           price : obj.attributes.price,
@@ -74,7 +59,7 @@ angular.module('starter.controllers', ['ionic'])
             });     
         },
         error:function(error) {
-              console.log("Error retrieving stores!");
+              console.log("Error retrieving stores!", error);
         }
     }); //end query.find
 }
@@ -85,13 +70,19 @@ $scope.changeStore = function(storeId) {
     //get lat and longitude for seleted location
     var data = JSON.parse(window.localStorage.getItem('stores'));
 
-    var lat  = data[storeId].lat; //latitude
-    var lgn  = data[storeId].lgn; //longitude
-    var store = (data[storeId].name.length > 0) ? data[storeId].name : data[storeId].address
+    var lat  = data[storeId].coords.latitude; //latitude
+    var lgn  = data[storeId].coords.longitude; //longitude
+    var store = (data[storeId].name.length > 0) ? data[storeId].name : data[storeId].address;
+    var price = data[storeId].price;
+    var distance = data[storeId].distance;
+    var address = data[storeId].address;
 
     DataStore.setStore(store);
     DataStore.setLatitude(lat);
     DataStore.setLongitude(lgn);
+    DataStore.setPrice(price);
+    DataStore.setDistance(distance);
+    DataStore.setAddress(address);
 
     $state.go('tab.home');
 }

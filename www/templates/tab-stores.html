@@ -1,13 +1,12 @@
-<ion-view title="Cities">
+<ion-view title="Stores">
     <ion-content class="has-header">
-      <h1>Select store</h1>
         <ion-list>
           <ion-item ng-repeat="store in stores" class=" item-icon-right item-note-right" ng-click="changeStore('{{$index}}')">
                 <span href="#">
                     <!-- <span class=""></span> -->
-                    <button class="button button-positive button button-small">
+                    <span>
                       ${{store.price | number : 2}}
-                    </button>
+                    </span>
                     {{store.name || store.address}} 
                 </span>
                 <span class="item-note">{{store.distance | number : 2}}mi</span>
