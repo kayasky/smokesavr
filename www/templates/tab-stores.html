@@ -1,0 +1,18 @@
+<ion-view title="Cities">
+    <ion-content class="has-header">
+      <h1>Select store</h1>
+        <ion-list>
+          <ion-item ng-repeat="store in stores" class=" item-icon-right item-note-right">
+                <span href="#" ng-click="changeStore('{{$index}}')">
+                    <!-- <span class=""></span> -->
+                    <button class="button button-positive button button-small">
+                      ${{store.price | number : 2}}
+                    </button>
+                    {{store.name || store.address}} 
+                </span>
+                <span class="item-note">{{store.distance | number : 2}}mi</span>
+                <i class="icon ion-ios7-arrow-right"></i>
+          </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
