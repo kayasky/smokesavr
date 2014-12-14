@@ -1,10 +1,9 @@
 <ion-view title="Stores">
     <ion-content class="has-header">
         <ion-list>
-          <ion-item ng-repeat="store in stores" class=" item-icon-right item-note-right" ng-click="changeStore('{{$index}}')">
+          <ion-item ng-repeat="store in stores" class=" item-icon-right item-note-right" ng-click="changeStore('{{store.id}}')">
                 <span href="#">
-                    <!-- <span class=""></span> -->
-                    <span>
+                    <span class="list-price">
                       ${{store.price | number : 2}}
                     </span>
                     {{store.name || store.address}} 
