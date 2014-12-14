@@ -18,7 +18,11 @@ factory('DataStore', function() {
         longitude: 0,
         price: 0.00,
         distance: 0,
-        address: "1 Infinte Loop"
+        address: "",
+        currentLocation: {
+            latitude: 0,
+            longitude: 0
+        }
     };
     DataStore.setStore = function(value) {
         DataStore.store = value;
@@ -38,5 +42,9 @@ factory('DataStore', function() {
     DataStore.setAddress = function(value) {
         DataStore.address = value;
     };
+    DataStore.setCurrentLocation = function(value) {
+        DataStore.currentLocation = value;
+    };
+
     return DataStore;
 });
