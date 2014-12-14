@@ -2,3 +2,17 @@
 .pane {
     letter-spacing: 0.02em;
 }
+
+.homebg {
+    background: #ffc900;
+}
+
+.list-price {
+    padding: 17px;
+    background: #00d;
+    margin-left: -16px;
+    margin-right: 10px;
+    background-color: #4a87ee;
+    color: #fff;
+    font-weight: bold;
+}

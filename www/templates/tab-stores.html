@@ -6,7 +6,7 @@
                     <span class="list-price">
                       ${{store.price | number : 2}}
                     </span>
-                    {{store.name || store.address}} 
+                    {{store.name || store.address | limitTo : 18}}
                 </span>
                 <span class="item-note">{{store.distance | number : 2}}mi</span>
                 <i class="icon ion-ios7-arrow-right"></i>
