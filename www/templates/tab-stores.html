@@ -1,14 +1,18 @@
-<ion-view title="Stores">
+<ion-view title="Stores" hide-nav-bar="false">
     <ion-content class="has-header">
-        <ion-list>
-          <ion-item ng-repeat="store in stores" class=" item-icon-right item-note-right" ng-click="changeStore('{{store.id}}')">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <ion-list class="storesList">
+          <ion-item ng-repeat="store in stores" class=" item-icon-right item-note-left" ng-click="changeStore('{{store.id}}')">
                 <span href="#">
                     <span class="list-price">
                       ${{store.price | number : 2}}
                     </span>
-                    {{store.name || store.address | limitTo : 18}}
+                    <div style="width:100%;">{{store.name || store.address | limitTo : 18}}</div>
+                    <span class="item-note">{{store.distance | number : 2}}mi</span>
                 </span>
-                <span class="item-note">{{store.distance | number : 2}}mi</span>
                 <i class="icon ion-ios7-arrow-right"></i>
           </ion-item>
         </ion-list>

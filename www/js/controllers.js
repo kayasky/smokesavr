@@ -2,22 +2,33 @@ angular.module('starter.controllers', ['ionic'])
     .controller('HomeCtrl', function($scope, $state, DataStore) {
         //HomeCtrl empty as of now
     })
-    .controller('StoreDetailCtrl', function($scope, $rootScope, $state, DataStore) {
-        var data = {
-            latitude: DataStore.latitude,
-            longitude: DataStore.longitude,
-            price: DataStore.price,
-            distance: DataStore.distance,
-            address: DataStore.address
-        };
-        $scope.store = DataStore.store;
-        $scope.current = data;
-    })
-    .controller('LocationsCtrl', function($scope, $rootScope, $state, DataStore) {
+    .controller('LocationsCtrl', function($scope, $rootScope, $state, $ionicLoading, DataStore) {
         var data = window.localStorage.getItem('stores');
 
+        // EMPTY stores instance
         $scope.stores = {};
+
+        // STEP 1: Show the Loading overlay
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
+
+        // STEP 3: Get user's current location
+        $scope.getUserLocation = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    DataStore.setCurrentLocation({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    });
+                    $scope.getStores(DataStore.currentLocation);
+                });
+            }
+        };
+
+        // STEP 4: Get stores based on user's current location.
         $scope.getStores = function(currentLocation) {
+
             Parse.initialize("Mvrt7PkZ9nuhs2wyhsH9HXjUc6A0FOFDBstPH8u6", "Sw0Hw9RaoOiln6YDx5s7YgVkKAn8JP6KEw3Uo6Bg");
 
             var userGeoPoint = new Parse.GeoPoint(currentLocation),
@@ -29,6 +40,8 @@ angular.module('starter.controllers', ['ionic'])
             query.limit(20);
             query.find({
                 success: function(results) {
+                    $ionicLoading.hide();
+                    $scope.$broadcast('scroll.refreshComplete');
                     $scope.$apply(function() {
                         var index = 0,
                             Arrlen = results.length;
@@ -64,18 +77,8 @@ angular.module('starter.controllers', ['ionic'])
             }); //end query.find
         };
 
-        $scope.getUserLocation = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    DataStore.setCurrentLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    });
-                    $scope.getStores(DataStore.currentLocation);
-                });
-            }
-        };
 
+        // STEP 5: Call this when user tries to navigate to a certain store
         $scope.changeStore = function(storeId) {
             var data = JSON.parse(window.localStorage.getItem('stores')),
                 lat = data[storeId].coords.latitude, //latitude
@@ -85,6 +88,7 @@ angular.module('starter.controllers', ['ionic'])
                 address = data[storeId].address,
                 store = (data[storeId].name.length > 0) ? data[storeId].name : data[storeId].address;
 
+            // Store data about selected store in DataStore
             DataStore.setStore(store);
             DataStore.setLatitude(lat);
             DataStore.setLongitude(lgn);
@@ -92,12 +96,31 @@ angular.module('starter.controllers', ['ionic'])
             DataStore.setDistance(distance);
             DataStore.setAddress(address);
 
+            // Finally, navigate to selected store
             $state.go('tab.storedetail', {
                 'storeId': storeId
             });
         }
 
+        // STEP 2: Call the function to get userLocation
         $scope.getUserLocation();
+
+        // Called when pull to refresh is performed by user
+        $scope.doRefresh = function() {
+            $scope.getUserLocation();
+        }
+    })
+    .controller('StoreDetailCtrl', function($scope, $rootScope, $state, DataStore) {
+        // Pull data from DataStore about current store
+        var data = {
+            latitude: DataStore.latitude,
+            longitude: DataStore.longitude,
+            price: DataStore.price,
+            distance: DataStore.distance,
+            address: DataStore.address
+        };
+        $scope.store = DataStore.store;
+        $scope.current = data;
     })
     .controller('SettingsCtrl', function($scope) {
         //manages app settings
