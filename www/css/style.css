@@ -7,12 +7,19 @@
     background: #ffc900;
 }
 
+.storesList .item {
+    height: 80px;
+}
+
+.storesList .item .item-note {
+    float: left;
+    margin-top: 5px;
+}
+
 .list-price {
-    padding: 17px;
-    background: #00d;
-    margin-left: -16px;
-    margin-right: 10px;
-    background-color: #4a87ee;
-    color: #fff;
+    padding: 12px 0px;
+    width: 70px;
+    color: #4a87ee;
     font-weight: bold;
+    float: left;
 }
