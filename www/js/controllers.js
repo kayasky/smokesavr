@@ -126,10 +126,8 @@ angular.module('starter.controllers', ['ionic'])
 
         // Open Directions when user taps on Address
         $scope.openDirections = function() {
-            var mappApp = "http://maps.google.com/?daddr=" + data.address;
-            if (ionic.Platform.isAndroid()) {
-                mappApp = "geo:0,0?q=" + data.address;
-            } else if (ionic.Platform.isIOS()) {
+            var mappApp = "http://maps.google.com/?daddr=" + data.latitude + "," + data.longitude;
+            if (ionic.Platform.isIOS()) {
                 mappApp = "http://maps.apple.com/?daddr=" + data.address;
             }
             window.open(mappApp, '_blank', 'location=yes');
