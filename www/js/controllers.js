@@ -86,7 +86,7 @@ angular.module('starter.controllers', ['ionic'])
                 price = data[storeId].price,
                 distance = data[storeId].distance,
                 address = data[storeId].address,
-                store = (data[storeId].name.length > 0) ? data[storeId].name : data[storeId].address;
+                store = (data[storeId].name.length > 0) ? data[storeId].name : "Some Shop";
 
             // Store data about selected store in DataStore
             DataStore.setStore(store);
@@ -111,6 +111,9 @@ angular.module('starter.controllers', ['ionic'])
         }
     })
     .controller('StoreDetailCtrl', function($scope, $rootScope, $state, DataStore) {
+
+        $scope.store = DataStore.store;
+
         // Pull data from DataStore about current store
         var data = {
             latitude: DataStore.latitude,
@@ -119,8 +122,18 @@ angular.module('starter.controllers', ['ionic'])
             distance: DataStore.distance,
             address: DataStore.address
         };
-        $scope.store = DataStore.store;
         $scope.current = data;
+
+        // Open Directions when user taps on Address
+        $scope.openDirections = function() {
+            var mappApp = "http://maps.google.com/?daddr=" + data.address;
+            if (ionic.Platform.isAndroid()) {
+                mappApp = "geo:0,0?q=" + data.address;
+            } else if (ionic.Platform.isIOS()) {
+                mappApp = "http://maps.apple.com/?daddr=" + data.address;
+            }
+            window.open(mappApp, '_blank', 'location=yes');
+        };
     })
     .controller('SettingsCtrl', function($scope) {
         //manages app settings
