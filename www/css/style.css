@@ -16,10 +16,18 @@
     margin-top: 5px;
 }
 
-.list-price {
+.storesList .list-price {
     padding: 12px 0px;
     width: 70px;
     color: #4a87ee;
     font-weight: bold;
     float: left;
+}
+
+.storeDetail .item {
+    border-color: transparent;
+}
+
+.storeDetail .icon {
+    font-size: 1.2em;
 }

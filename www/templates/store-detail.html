@@ -1,19 +1,19 @@
-<ion-view title="{{store.store}}">
+<ion-view title="{{current.name}}">
     <ion-content class="has-header">
-        <div class="list card">
+        <div class="list storeDetail">
 
             <a href="#" class="item item-icon-left" ng-click="openDirections()">
-            <i class="icon ion-ios7-location"></i>
+            <i class="icon ion-ios7-location positive"></i>
             {{current.address}}
             </a>
 
             <a href="#" class="item item-icon-left">
-            <i class="icon ion-social-usd"></i>
+            <i class="icon ion-social-usd positive"></i>
             {{current.price | number : 2}}
             </a>
 
             <a href="#" class="item item-icon-left">
-            <i class="icon ion-ios7-speedometer"></i>
+            <i class="icon ion-ios7-speedometer positive"></i>
             {{current.distance | number : 1}}mi
             </a>
 
