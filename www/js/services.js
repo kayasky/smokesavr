@@ -10,8 +10,8 @@ angular.module('starter.services', ['ngResource']).factory('Cities', function() 
             return stores[storeId];
         }
     }
-}).
-factory('DataStore', function() {
+})
+.factory('DataStore', function() {
     //create datastore with default values
     var DataStore = {
         latitude: 0,
@@ -22,10 +22,17 @@ factory('DataStore', function() {
         currentLocation: {
             latitude: 0,
             longitude: 0
-        }
+        },
+        stores: {}
     };
     DataStore.setStore = function(value) {
         DataStore.store = value;
+    };
+    DataStore.getStore = function(value) {
+        return DataStore.store;
+    };
+    DataStore.setStores = function(value) {
+        DataStore.stores = value;
     };
     DataStore.setLatitude = function(value) {
         DataStore.latitude = value;

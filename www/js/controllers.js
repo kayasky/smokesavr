@@ -68,6 +68,7 @@ angular.module('starter.controllers', ['ionic'])
                                 };
                             }
                         }
+                        DataStore.setStores($scope.stores);
                         window.localStorage.setItem('stores', JSON.stringify($scope.stores));
                     });
                 },
@@ -80,23 +81,7 @@ angular.module('starter.controllers', ['ionic'])
 
         // STEP 5: Call this when user tries to navigate to a certain store
         $scope.changeStore = function(storeId) {
-            var data = JSON.parse(window.localStorage.getItem('stores')),
-                lat = data[storeId].coords.latitude, //latitude
-                lgn = data[storeId].coords.longitude, //longitude
-                price = data[storeId].price,
-                distance = data[storeId].distance,
-                address = data[storeId].address,
-                store = (data[storeId].name.length > 0) ? data[storeId].name : "Some Shop";
 
-            // Store data about selected store in DataStore
-            DataStore.setStore(store);
-            DataStore.setLatitude(lat);
-            DataStore.setLongitude(lgn);
-            DataStore.setPrice(price);
-            DataStore.setDistance(distance);
-            DataStore.setAddress(address);
-
-            // Finally, navigate to selected store
             $state.go('tab.storedetail', {
                 'storeId': storeId
             });
@@ -110,19 +95,12 @@ angular.module('starter.controllers', ['ionic'])
             $scope.getUserLocation();
         }
     })
-    .controller('StoreDetailCtrl', function($scope, $rootScope, $state, DataStore) {
+    .controller('StoreDetailCtrl', function($scope, $stateParams, $state, DataStore) {
 
-        $scope.store = DataStore.store;
+        var storeId = $stateParams.storeId,
+            data = JSON.parse(window.localStorage.getItem('stores'));
 
-        // Pull data from DataStore about current store
-        var data = {
-            latitude: DataStore.latitude,
-            longitude: DataStore.longitude,
-            price: DataStore.price,
-            distance: DataStore.distance,
-            address: DataStore.address
-        };
-        $scope.current = data;
+        $scope.current = data[storeId];
 
         // Open Directions when user taps on Address
         $scope.openDirections = function() {
