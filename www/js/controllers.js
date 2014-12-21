@@ -101,16 +101,17 @@ angular.module('starter.controllers', ['ionic'])
             data = JSON.parse(window.localStorage.getItem('stores'));
 
         $scope.current = data[storeId];
+        $scope.current.streetView = "https://maps.googleapis.com/maps/api/streetview?size=640x640&location=" + $scope.current.address + "&fov=100&pitch=-30&key=AIzaSyCfIddS2nOkwKCAmhDEDAx2rvPfjuCBqFc";
 
         // Open Directions when user taps on Address
         $scope.openDirections = function() {
-            var mappApp = "http://maps.google.com/?daddr=" + data.latitude + "," + data.longitude;
+            var mappApp = "http://maps.google.com/?daddr=" + $scope.current.coords.latitude + "," + $scope.current.coords.longitude;
             if (ionic.Platform.isIOS()) {
-                mappApp = "http://maps.apple.com/?daddr=" + data.address;
+                mappApp = "http://maps.apple.com/?daddr=" + $scope.current.address;
             }
             window.open(mappApp, '_blank', 'location=yes');
         };
     })
     .controller('SettingsCtrl', function($scope) {
         //manages app settings
-    });
+    })

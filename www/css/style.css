@@ -24,10 +24,22 @@
     float: left;
 }
 
-.storeDetail .item {
-    border-color: transparent;
+.item-streetview {
+    height: 200px;
+    overflow: hidden;
+    width: 100%;
 }
 
-.storeDetail .icon {
+.item-streetview-img {
+    width: 100%;
+
+}
+
+.storeDetail .item {
+    border-color: transparent;
+    color: #444;
+}
+
+.storeDetail .item .icon {
     font-size: 1.2em;
 }

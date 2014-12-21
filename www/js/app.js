@@ -14,6 +14,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         Parse.initialize("Mvrt7PkZ9nuhs2wyhsH9HXjUc6A0FOFDBstPH8u6", "Sw0Hw9RaoOiln6YDx5s7YgVkKAn8JP6KEw3Uo6Bg");
     });
 })
+.filter('orderObjectBy', function() {
+    return function(items, field, reverse) {
+        var filtered = [];
+        angular.forEach(items, function(item) {
+            filtered.push(item);
+        });
+        filtered.sort(function (a, b) {
+            return (a[field] > b[field] ? 1 : -1);
+        });
+        if(reverse) {
+            filtered.reverse();
+        }
+        return filtered;
+    };
+})
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
     // setup an abstract state for the tabs directive
