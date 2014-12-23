@@ -6,7 +6,8 @@ angular.module('starter.controllers', ['ionic'])
         var data = window.localStorage.getItem('stores');
 
         // EMPTY stores instance
-        $scope.stores = {};
+        $scope.stores = {},
+        $scope.maxDistance = 50;
 
         // STEP 1: Show the Loading overlay
         $ionicLoading.show({
@@ -21,13 +22,17 @@ angular.module('starter.controllers', ['ionic'])
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude
                     });
-                    $scope.getStores(DataStore.currentLocation);
+                    //$scope.getStores(DataStore.currentLocation);
+                    $scope.getStores({
+                        latitude: 47.6097,
+                        longitude: -122.3331
+                    }, $scope.maxDistance);
                 });
             }
         };
 
         // STEP 4: Get stores based on user's current location.
-        $scope.getStores = function(currentLocation) {
+        $scope.getStores = function(currentLocation, maxDistance) {
 
             Parse.initialize("Mvrt7PkZ9nuhs2wyhsH9HXjUc6A0FOFDBstPH8u6", "Sw0Hw9RaoOiln6YDx5s7YgVkKAn8JP6KEw3Uo6Bg");
 
@@ -36,7 +41,8 @@ angular.module('starter.controllers', ['ionic'])
                 query = new Parse.Query(storeObj);
 
             // Build the query && execute it
-            query.near("coords", userGeoPoint);
+            //query.near("coords", userGeoPoint);
+            query.withinMiles("coords", userGeoPoint, maxDistance)
             query.limit(20);
             query.find({
                 success: function(results) {
@@ -94,6 +100,14 @@ angular.module('starter.controllers', ['ionic'])
         $scope.doRefresh = function() {
             $scope.getUserLocation();
         }
+
+        $scope.setMaxDistance = function(max) {
+            console.log(max);
+            if (5 < max < 101) {
+                $scope.maxDistance = max;
+            }
+        }
+
     })
     .controller('StoreDetailCtrl', function($scope, $stateParams, $state, DataStore) {
 
