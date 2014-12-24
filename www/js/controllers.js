@@ -3,11 +3,12 @@ angular.module('starter.controllers', ['ionic'])
         //HomeCtrl empty as of now
     })
     .controller('LocationsCtrl', function($scope, $rootScope, $state, $ionicLoading, DataStore) {
-        var data = window.localStorage.getItem('stores');
-
+        var data = window.localStorage.getItem('stores'),
+            mockLocation = true,
+            maxStores = 20;
         // EMPTY stores instance
         $scope.stores = {},
-        $scope.maxDistance = 50;
+        $scope.maxDistance = 50; //max search radius in miles
 
         // STEP 1: Show the Loading overlay
         $ionicLoading.show({
@@ -22,11 +23,7 @@ angular.module('starter.controllers', ['ionic'])
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude
                     });
-                    //$scope.getStores(DataStore.currentLocation);
-                    $scope.getStores({
-                        latitude: 47.6097,
-                        longitude: -122.3331
-                    }, $scope.maxDistance);
+                    $scope.getStores(DataStore.currentLocation, $scope.maxDistance);
                 });
             }
         };
@@ -43,9 +40,10 @@ angular.module('starter.controllers', ['ionic'])
             // Build the query && execute it
             //query.near("coords", userGeoPoint);
             query.withinMiles("coords", userGeoPoint, maxDistance)
-            query.limit(20);
+            query.limit(maxStores);
             query.find({
                 success: function(results) {
+                    $scope.stores = {};
                     $ionicLoading.hide();
                     $scope.$broadcast('scroll.refreshComplete');
                     $scope.$apply(function() {
@@ -94,7 +92,15 @@ angular.module('starter.controllers', ['ionic'])
         }
 
         // STEP 2: Call the function to get userLocation
-        $scope.getUserLocation();
+        if (mockLocation) {
+            DataStore.setCurrentLocation({
+                latitude: 47.6097,
+                longitude: -122.3331
+            });
+            $scope.getStores(DataStore.currentLocation, $scope.maxDistance);
+        } else {
+            $scope.getUserLocation();
+        }
 
         // Called when pull to refresh is performed by user
         $scope.doRefresh = function() {
@@ -102,9 +108,12 @@ angular.module('starter.controllers', ['ionic'])
         }
 
         $scope.setMaxDistance = function(max) {
-            console.log(max);
-            if (5 < max < 101) {
-                $scope.maxDistance = max;
+            var dragObj = max,
+                distance = dragObj.distance;
+
+            if ((2 < distance < 101) && ($scope.maxDistance !== distance)) {
+                $scope.maxDistance = distance;
+                $scope.getStores(DataStore.currentLocation, $scope.maxDistance);
             }
         }
 
