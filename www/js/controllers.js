@@ -107,10 +107,7 @@ angular.module('starter.controllers', ['ionic'])
             $scope.getUserLocation();
         }
 
-        $scope.setMaxDistance = function(max) {
-            var dragObj = max,
-                distance = dragObj.distance;
-
+        $scope.setMaxDistance = function(distance) {
             if ((2 < distance < 101) && ($scope.maxDistance !== distance)) {
                 $scope.maxDistance = distance;
                 $scope.getStores(DataStore.currentLocation, $scope.maxDistance);

@@ -2,7 +2,7 @@
     <ion-content>
         <div class="range range-positive">
             <i class="icon ion-ios7-location positive"></i>
-            <input type="range" min="2" max="100" step="1" name="distance" ng-init="distance=50" on-release="setMaxDistance(this)" ng-model="distance">
+            <input type="range" min="2" max="100" step="1" name="distance" ng-init="distance=50" on-release="setMaxDistance(distance)" ng-model="distance">
             <i class="positive">{{ distance }}mi</i>
         </div>
         <ion-refresher
